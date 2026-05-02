@@ -14,6 +14,7 @@ function getTimestamp() {
 
 export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSend = (text: string) => {
     const userMsg: Message = {
@@ -29,22 +30,31 @@ export default function ChatPage() {
   };
 
   const callCorky = async (userMessage: string) => {
-    const reply = await chat(userMessage)
-
-    const botMsg: Message = {
-      id: `b-${Date.now() + 1}`,
-      role: "bot",
-      text: reply || '',
-      timestamp: getTimestamp(),
-    };
-
-    setMessages((prev) => [...prev, botMsg]);
+    setIsLoading(true); // Set loading to true before API call
+    
+    try {
+      const reply = await chat(userMessage);
+      
+      const botMsg: Message = {
+        id: `b-${Date.now() + 1}`,
+        role: "bot",
+        text: reply || '',
+        timestamp: getTimestamp(),
+      };
+      
+      setMessages((prev) => [...prev, botMsg]);
+    } catch (error) {
+      // Handle error if needed
+      console.error("Error getting response:", error);
+    } finally {
+      setIsLoading(false); // Set loading to false after API call completes
+    }
   }
 
   return (
     <div className="flex flex-col h-full">
       <ChatHeader />
-      <MessageList messages={messages} onSuggestedPrompt={handleSend} />
+      <MessageList messages={messages} onSuggestedPrompt={handleSend} isLoading={isLoading} />
       <ChatInput onSend={handleSend} />
     </div>
   );

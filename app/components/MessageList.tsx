@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import MessageBubble, { type Message } from "./MessageBubble";
+import LoadingBubble from "./LoadingBubble";
 
 const SUGGESTED_PROMPTS = [
   "What wine pairs with grilled salmon?",
@@ -12,15 +13,16 @@ const SUGGESTED_PROMPTS = [
 type Props = {
   messages: Message[];
   onSuggestedPrompt: (prompt: string) => void;
+  isLoading?: boolean;
 };
 
-export default function MessageList({ messages, onSuggestedPrompt }: Props) {
+export default function MessageList({ messages, onSuggestedPrompt, isLoading = false }: Props) {
   const bottomRef = useRef<HTMLDivElement>(null);
 
   // Auto-scroll to latest message
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  }, [messages, isLoading]);
 
   return (
     <div className="flex-1 overflow-y-auto bg-[#FAF5EC] px-4 py-6">
@@ -55,7 +57,10 @@ export default function MessageList({ messages, onSuggestedPrompt }: Props) {
             </div>
           </div>
         ) : (
-          messages.map((msg) => <MessageBubble key={msg.id} message={msg} />)
+          <>
+            {messages.map((msg) => <MessageBubble key={msg.id} message={msg} />)}
+            {isLoading && <LoadingBubble />}
+          </>
         )}
 
         {/* Scroll anchor */}
