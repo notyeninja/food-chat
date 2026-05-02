@@ -9,7 +9,7 @@ export default function ChatHeader() {
       {/* Bot name + tagline */}
       <div className="flex flex-col">
         <span className="text-[#FAF5EC] font-semibold text-base leading-tight tracking-wide">
-          Sommelier
+          Corky
         </span>
         <span className="text-[#FAF5EC]/75 text-xs leading-tight">
           Your personal wine pairing guide

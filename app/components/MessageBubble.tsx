@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export type Message = {
   id: string;
   role: "bot" | "user";
@@ -19,7 +21,7 @@ export default function MessageBubble({ message }: Props) {
       {/* Bot avatar — only shown for bot messages */}
       {isBot && (
         <div className="flex items-center justify-center w-8 h-8 rounded-full bg-[#7FAFB8] text-sm shrink-0 mb-1 shadow-sm">
-          🍷
+          <Image src="/chat-sticker.gif" alt="corky" width={100} height={100} />
         </div>
       )}
 
