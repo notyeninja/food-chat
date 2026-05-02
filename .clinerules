@@ -1,0 +1,12 @@
+# Cline Rules for food-chat
+
+<!-- Sourced from AGENTS.md -->
+
+## This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data.
+
+**Before writing any Next.js code:**
+- Read the relevant guide in `node_modules/next/dist/docs/`
+- Heed all deprecation notices found there
+- Do not assume standard Next.js conventions apply without verifying them first
