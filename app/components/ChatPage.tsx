@@ -11,31 +11,11 @@ function getTimestamp() {
   return new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 }
 
-// Mock bot response for UI iteration (no API yet)
-function getMockBotReply(userText: string): string {
-  const lower = userText.toLowerCase();
-  if (lower.includes("salmon") || lower.includes("fish") || lower.includes("seafood")) {
-    return "For salmon, I'd recommend a crisp Pinot Gris or an unoaked Chardonnay. The bright acidity cuts through the richness of the fish beautifully. 🥂";
-  }
-  if (lower.includes("steak") || lower.includes("beef") || lower.includes("red meat")) {
-    return "A bold Cabernet Sauvignon or a Malbec would be perfect with beef. The tannins complement the fat and protein in the meat wonderfully. 🍷";
-  }
-  if (lower.includes("pasta") || lower.includes("italian")) {
-    return "For Italian pasta dishes, a Chianti Classico or Sangiovese is a classic pairing. The acidity matches tomato-based sauces perfectly! 🍝";
-  }
-  if (lower.includes("spicy") || lower.includes("thai") || lower.includes("indian") || lower.includes("curry")) {
-    return "Spicy food pairs beautifully with an off-dry Riesling or Gewürztraminer. The slight sweetness tames the heat while the aromatics complement the spices. 🌶️";
-  }
-  if (lower.includes("cheese") || lower.includes("charcuterie")) {
-    return "For a cheese board, a versatile Champagne or Prosecco works with almost everything. For aged cheeses, try a Sauternes or Port. 🧀";
-  }
-  return "That sounds delicious! Could you tell me more about the preparation or sauce? That'll help me find the ideal wine pairing for you. 🍽️";
-}
 
 export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
 
-  const handleSend = async (text: string) => {
+  const handleSend = (text: string) => {
     const userMsg: Message = {
       id: `u-${Date.now()}`,
       role: "user",
@@ -43,7 +23,13 @@ export default function ChatPage() {
       timestamp: getTimestamp(),
     };
 
-    const reply = await chat(text)
+    setMessages((prev) => [...prev, userMsg]);
+
+    callCorky(text);
+  };
+
+  const callCorky = async (userMessage: string) => {
+    const reply = await chat(userMessage)
 
     const botMsg: Message = {
       id: `b-${Date.now() + 1}`,
@@ -52,8 +38,8 @@ export default function ChatPage() {
       timestamp: getTimestamp(),
     };
 
-    setMessages((prev) => [...prev, userMsg, botMsg]);
-  };
+    setMessages((prev) => [...prev, botMsg]);
+  }
 
   return (
     <div className="flex flex-col h-full">
