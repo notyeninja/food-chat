@@ -5,6 +5,7 @@ import ChatHeader from "./ChatHeader";
 import MessageList from "./MessageList";
 import ChatInput from "./ChatInput";
 import { type Message } from "./MessageBubble";
+import { chat } from "../lib/corky";
 
 function getTimestamp() {
   return new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
@@ -34,7 +35,7 @@ function getMockBotReply(userText: string): string {
 export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
 
-  const handleSend = (text: string) => {
+  const handleSend = async (text: string) => {
     const userMsg: Message = {
       id: `u-${Date.now()}`,
       role: "user",
@@ -42,10 +43,12 @@ export default function ChatPage() {
       timestamp: getTimestamp(),
     };
 
+    const reply = await chat(text)
+
     const botMsg: Message = {
       id: `b-${Date.now() + 1}`,
       role: "bot",
-      text: getMockBotReply(text),
+      text: reply || '',
       timestamp: getTimestamp(),
     };
 
